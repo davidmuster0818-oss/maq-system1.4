@@ -1,0 +1,11 @@
+{
+  "status": "completed",
+  "elapsed_seconds": 1361.0,
+  "elapsed_minutes": 22.7,
+  "total_checked": 1457,
+  "fetched": 1456,
+  "empty": 1,
+  "inserted": 1456,
+  "errors": 0,
+  "completed_at": "2026-03-16T13:05:55.344974+00:00"
+}
