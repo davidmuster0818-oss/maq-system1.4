@@ -128,9 +128,18 @@ export const printOS = (order, sigData = null) => {
   iframeDoc.write(printContent);
   iframeDoc.close();
 
-  setTimeout(() => {
-    try { iframe.contentWindow.print(); } catch(e) { console.error('Print error:', e); }
-  }, 500);
+  // Só imprime depois que logo e QR code carregarem (senão saem em branco)
+  const imgs = Array.from(iframeDoc.images);
+  const loaded = imgs.map((img) => (img.complete && img.naturalWidth ? Promise.resolve() : new Promise((res) => {
+    img.addEventListener('load', res, { once: true });
+    img.addEventListener('error', res, { once: true });
+  })));
+  const timeout = new Promise((res) => setTimeout(res, 5000));
+  Promise.race([Promise.all(loaded), timeout]).then(() => {
+    setTimeout(() => {
+      try { iframe.contentWindow.focus(); iframe.contentWindow.print(); } catch(e) { console.error('Print error:', e); }
+    }, 150);
+  });
 };
 
 export const sendWhatsAppCopy = async (order, sigData = null, toast) => {
